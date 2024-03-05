@@ -1,0 +1,56 @@
+/*****************************************************************/
+/********************* Flame Sensor Wrapper **********************/
+/*****************************************************************/
+
+/*** Flame Sensor
+Wiring connections
+MQ-2    Heltec WiFi LoRa 32
+DO      34
+AO      35
+VCC     3.3V
+GND     GND
+***/
+
+#ifndef FLAME_SENSOR_WRAPPER_HPP
+#define FLAME_SENSOR_WRAPPER_HPP
+
+#include <Arduino.h>
+#include <Wire.h>
+
+namespace FlameSensor
+{
+    // Flame Sensor Pin Definitions and Constants
+    static constexpr gpio_num_t DO_PIN_FLAME = GPIO_NUM_34; // Digital Output Pin
+    static constexpr gpio_num_t AO_PIN_FLAME = GPIO_NUM_35; // Analog Output Pin
+
+// FlameSensorWrapper class for Flame Sensor
+class FlameSensorWrapper
+{
+    private:
+    int _flameValue; // Flame Sensor Value
+    bool _flameState; // Flame Sensor State
+
+    public:
+    // Constructor
+    FlameSensorWrapper() : _flameValue(0), _flameState(false) {}
+
+    // Destructor
+    ~FlameSensorWrapper() {}
+
+    // Initialize Flame Sensor
+    bool initFlameSensor();
+
+    // Read Flame Sensor Value
+    int readFlameValue();
+
+    // Read Flame Sensor State
+    bool readFlameState();
+
+    // Get DO_PIN_FLAME
+    gpio_num_t getDoPinFlame() { return DO_PIN_FLAME; }
+
+}; // end of FlameSensorWrapper class
+
+} // end of FlameSensor namespace
+
+#endif // FLAME_SENSOR_WRAPPER_HPP

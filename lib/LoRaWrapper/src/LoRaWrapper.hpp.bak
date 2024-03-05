@@ -1,0 +1,208 @@
+/*****************************************************************/
+/******** LoRaWrapper based on LoRa.h library by Sandeep *********/
+/*****************************************************************/
+#ifndef LoRaWrapper_HPP
+#define LoRaWrapper_HPP
+
+#include <Arduino.h>
+#include <SPI.h>
+#include <LoRa.h>
+
+namespace LoRaWrapper
+{
+    // Constants Definitions
+    static constexpr uint8_t MIN_GPIO_PIN = 0;
+    static constexpr uint8_t MAX_GPIO_PIN = 39;
+
+// LoRaWrapper Class
+class LoRaWrapper
+{
+    private:
+    /*****************LoRa Module Pins****************/
+    gpio_num_t LORA_RST;
+    gpio_num_t LORA_SS_CS;
+    gpio_num_t LORA_SCK;
+    gpio_num_t LORA_MOSI;
+    gpio_num_t LORA_MISO;
+    gpio_num_t LORA_DIO0;
+    /*************************************************/
+
+    /***************LoRa Module Parameters************/
+    /* --------------------------------------------- */
+    /* -- Frequency to initialize the Lora module -- */
+    /* --------------------------------------------- */
+    /* -- 433E6: Non-licensed frequency ------------ */
+    /* -- 868E6: Europe ---------------------------- */
+    /* -- 915E6: US -------------------------------- */
+    /* --------------------------------------------- */
+    // Use for initialization
+    int LORA_BAND = 868E6; // Set default to 868 MHz (Europe)
+    // Use for frequency change after initialization
+    int LORA_FREQ = 868E6; // Frequency change
+
+    /* --------------------------------------------- */
+    /* -- Set Transmission Power (TxPower) ----------*/
+    /* --------------------------------------------- */
+    /* -- Supported values for PA_OUTPUT_PA_BOOST_PIN*/
+    /* -- 2 to 20 (Default to 17) ------------------ */
+    /* --------------------------------------------- */
+    uint8_t LORA_TX_POWER = 17; // Library default value
+
+    /* --------------------------------------------- */
+    /* -- LoRa Data Rates for EU868 Band ----------- */
+    /* 0: SF = 12, BW = 125 kHz, BitRate =  250 bps  */
+    /* 1: SF = 11, BW = 125 kHz, BitRate =  440 bps  */
+    /* 2: SF = 10, BW = 125 kHz, BitRate =  980 bps  */
+    /* 3: SF =  9, BW = 125 kHz, BitRate = 1760 bps  */
+    /* 4: SF =  8, BW = 125 kHz, BitRate = 3125 bps  */
+    /* 5: SF =  7, BW = 125 kHz, BitRate = 5470 bps  */
+    /* --------------------------------------------- */
+
+    /* --------------------------------------------- */
+    /* -- Set Spreading Factor (SF) of Lora module - */
+    /* --------------------------------------------- */
+    /* -- Supported values --------------------------*/
+    /* -- 6 to 12 (Default to 7) ------------------- */
+    /* --------------------------------------------- */
+    uint8_t LORA_SPREADING_FACTOR = 7; // Library default value
+
+    /* --------------------------------------------- */
+    /* -- Set Signal Bandwidth (BW) of Lora module - */
+    /* --------------------------------------------- */
+    /* -- Supported values: -------------------------*/
+    /* -- 7.8E3 -------------------------------------*/
+    /* -- 10.4E3 ------------------------------------*/
+    /* -- 15.6E3 ------------------------------------*/
+    /* -- 20.8E3 ------------------------------------*/
+    /* -- 31.25E3 -----------------------------------*/
+    /* -- 41.7E3 ------------------------------------*/
+    /* -- 62.5E3 ------------------------------------*/
+    /* -- 125E3 -------------------------------------*/
+    /* -- 250E3 -------------------------------------*/
+    /* -- 500E3 -------------------------------------*/
+    /* --------------------------------------------- */
+    long LORA_SIGNAL_BANDWIDTH = 125E3; // Bandwith 125 kHz, Library default value
+
+    /* --------------------------------------------- */
+    /* -- Set Coding Rate (CR) of Lora module -------*/
+    /* --------------------------------------------- */
+    /* -- Supported values ------------------------- */
+    /* -- 5 to 8 (Default to 5) -------------------- */
+    /* -- corresponding to 4/5 to 4/8 -------------- */
+    /* -- with numerator fixed at 4 ---------------- */
+    /* --------------------------------------------- */
+    uint8_t LORA_CODING_RATE = 5; //Library default value 
+
+    /* --------------------------------------------- */
+    /* -- Enable CRC of Lora module ---------------- */
+    /* --------------------------------------------- */
+    /* -- Supported values --------------------------*/
+    /* -- true or false -----------------------------*/
+    /* --------------------------------------------- */
+    bool LORA_CRC = false; // Library default value
+
+    /* --------------------------------------------- */
+    /* -- Set Low Noise Amplifier (LNA) Gain ------- */
+    /* --------------------------------------------- */
+    /* -- LNA Gain can improve RX sensitivity ------ */
+    /* --------------------------------------------- */
+    /* -- Support values --------------------------- */
+    /* -- 0 to 6 (Default to 0) -------------------- */
+    /* --------------------------------------------- */
+    /* -- If gain is 0, Automatic Gain Control (AGC) */
+    /* -- is activated and LNA gain is not used ---- */
+    /* --------------------------------------------- */
+    /* -- Benefits of LNA -------------------------- */
+    /* -- 1) Improved sensitivity ------------------ */
+    /* -- 2) Extended range ------------------------ */
+    /* -- Drawbacks of LNA ------------------------- */
+    /* -- 1) Increased noise with higher gain ------ */
+    /* --------------------------------------------- */
+    /* -- Benefits of AGC -------------------------- */
+    /* -- 1) Prevents clipping --------------------- */
+    /* -- 2) Better signal-to-noise (snr) ratio ---- */
+    /* --    for weak signals                   ---- */
+    /* -- Drawbacks of AGC ------------------------- */
+    /* -- 1) May introduce delay, complexity ------- */
+    /* --------------------------------------------- */
+    uint8_t LORA_LNA_GAIN = 0; // Library default value
+    /*************************************************/
+
+
+    public:
+    // Default Constructor
+    LoRaWrapper() = default;
+    // Constructor
+    LoRaWrapper(gpio_num_t LORA_RST, gpio_num_t LORA_SS_CS, 
+                gpio_num_t LORA_SCK, gpio_num_t LORA_MOSI, 
+                gpio_num_t LORA_MISO, gpio_num_t LORA_DIO0, 
+                gpio_num_t LORA_SPREADING_FACTOR, 
+                gpio_num_t LORA_SIGNAL_BANDWIDTH,
+                int LORA_BAND)
+    : LORA_RST(LORA_RST), LORA_SS_CS(LORA_SS_CS), 
+        LORA_SCK(LORA_SCK), LORA_MOSI(LORA_MOSI),
+        LORA_MISO(LORA_MISO), LORA_DIO0(LORA_DIO0), 
+        LORA_SPREADING_FACTOR(LORA_SPREADING_FACTOR), 
+        LORA_SIGNAL_BANDWIDTH(LORA_SIGNAL_BANDWIDTH),
+        LORA_BAND(LORA_BAND) {}
+
+    // Initialize LoRa module
+
+    // Sleep LoRa module
+    bool sleepLoRa();
+
+    // Stop LoRa module
+    bool stopLoRa();
+
+    // Send and receive LoRa messages
+    void sendLoRaMessage(uint8_t* messageToSend, uint8_t messageSize);
+    void receiveLoRaMessage(uint8_t * receivedMessage, uint8_t messageSize);
+
+    // Setters in class
+    // - just set the values in class without calling 
+    //   the corresponding functions to set it with the 
+    //   library
+    // - allow future over-the-air update of the pins
+    //   should it be changed without resetting the device
+    bool setLORA_RST(int newLORA_RST);
+    bool setLORA_SS_CS(int newLORA_SS_CS);
+    bool setLORA_SCK(int newLORA_SCK);
+    bool setLORA_MOSI(int newLORA_MOSI);
+    bool setLORA_MISO(int newLORA_MISO);
+    bool setLORA_DIO0(int newLORA_DIO0);
+    bool setLORA_BAND(int newLORA_BAND);
+
+    // Setters in class and in LoRa.h 
+    // - set the values in class 
+    // - calling the corresponding setter functions in the 
+    //   LoRa.h 
+    bool setLORA_FREQ(int newLORA_FREQ);
+    bool setLORA_TX_POWER(int newTX_POWER_VALUE);
+    bool setLORA_SPREADING_FACTOR(int newLORA_SPREADING_FACTOR);
+    bool setLORA_SIGNAL_BANDWIDTH(long newLORA_SIGNAL_BANDWIDTH);
+    bool setLORA_CODING_RATE(int newLORA_CODING_RATE);
+    void setLORA_CRC_ON (bool newLORA_CRC_ON);
+    bool setLORA_LNA_GAIN (int newLORA_LNA_GAIN);
+
+
+    // Getters from class and assigned values in LoRa.h
+    gpio_num_t getLORA_RST();
+    gpio_num_t getLORA_SS_CS();
+    gpio_num_t getLORA_SCK();
+    gpio_num_t getLORA_MOSI();
+    gpio_num_t getLORA_MISO();
+    gpio_num_t getLORA_DIO0();
+    int     getLORA_BAND();
+    int     getLORA_FREQ();
+    uint8_t getLORA_TX_POWER();
+    uint8_t getLORA_SPREADING_FACTOR();
+    long    getLORA_SIGNAL_BANDWIDTH();
+    uint8_t getLORA_CODING_RATE();
+    bool    getLORA_CRC_ON();
+    uint8_t getLORA_LNA_GAIN();
+
+}; // class LoRaWrapper
+
+} // namespace LoRaWrapper
+
+#endif

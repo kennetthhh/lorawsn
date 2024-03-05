@@ -1,0 +1,95 @@
+#include "ThresholdsHandler.hpp"
+
+namespace ThresholdsHandler
+{
+    bool ThresholdsHandler::setGasThreshold(long gasThreshold)
+    {
+        bool valid_gasThreshold = false;
+
+        if (gasThreshold > 0 && gasThreshold < 4095)
+        {
+            _thresholds.gasThreshold = gasThreshold;
+            valid_gasThreshold = true;
+        }
+
+        return valid_gasThreshold;
+    }
+
+    bool ThresholdsHandler::setTempThreshold(long tempThreshold)
+    {
+        bool valid_tempThreshold = false;
+
+        if (tempThreshold > 0)
+        {
+            _thresholds.tempThreshold = tempThreshold;
+            valid_tempThreshold = true;
+        }
+
+        return valid_tempThreshold;
+    }
+
+    bool ThresholdsHandler::setPressureThreshold(long pressureThreshold)
+    {
+        bool valid_pressureThreshold = false;
+
+        if (pressureThreshold > 0)
+        {
+            _thresholds.pressureThreshold = pressureThreshold;
+            valid_pressureThreshold = true;
+        }
+
+        return valid_pressureThreshold;
+    }
+
+    bool ThresholdsHandler::setSleepTime(int sleepTime)
+    {
+        bool valid_sleepTime = false;
+
+        if (sleepTime > 0)
+        {
+            _thresholds.sleepTime = sleepTime;
+            valid_sleepTime = true;
+        }
+
+        return valid_sleepTime;
+    }
+
+    bool ThresholdsHandler::setDutyCycle(int dutyCycle)
+    {
+        bool valid_dutyCycle = false;
+
+        if (dutyCycle > 0)
+        {
+            _thresholds.dutyCycle = dutyCycle;
+            valid_dutyCycle = true;
+        }
+
+        return valid_dutyCycle;
+    }
+
+    long ThresholdsHandler::getGasThreshold()
+    {
+        return _thresholds.gasThreshold;
+    }
+
+    long ThresholdsHandler::getTempThreshold()
+    {
+        return _thresholds.tempThreshold;
+    }
+
+    long ThresholdsHandler::getPressureThreshold()
+    {
+        return _thresholds.pressureThreshold;
+    }
+
+    int ThresholdsHandler::getSleepTime()
+    {
+        return _thresholds.sleepTime;
+    }
+
+    int ThresholdsHandler::getDutyCycle()
+    {
+        return _thresholds.dutyCycle;
+    }
+
+} // namespace ThresholdsHandler

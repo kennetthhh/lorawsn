@@ -1,0 +1,58 @@
+/*****************************************************************/
+/*********************** UserInitConfig **************************/
+/******** authored by Kenneth Leow (zhleow.7@gmail.com) **********/
+/*****************************************************************/
+#ifndef USERINITCONFIG_HPP
+#define USERINITCONFIG_HPP
+
+#include <Arduino.h>
+#include <stdint.h>
+#include <string.h>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <iostream>
+#include <utility>
+#include <SPIFFS.h>
+#include <Adafruit_BMP085.h>
+#include "../../AutoNetworkingProtocol/src/AutoNetworkingProtocol.hpp"
+
+namespace UserInitConfig
+{
+// UserInitConfig Class
+class UserInitConfiguration
+{
+    public:
+    typedef struct _UserConfig
+    {
+        uint8_t sensorID;
+        uint8_t destID;
+        AutoNetwProc::AutoNetworkingProtocol::Roles role;
+        long flameThreshold;
+        long gasThreshold;
+        long tempThreshold;
+        int sleepTime;
+        int dutyCycle;
+    } UserConfig;
+    
+    UserConfig userConfig;
+
+    
+    // Constructor
+    UserInitConfiguration() {}
+    UserInitConfiguration(uint8_t sensorID, uint8_t destID, 
+        AutoNetwProc::AutoNetworkingProtocol::Roles role, long flameThreshold, long gasThreshold, 
+        long tempThreshold, int sleepTime, int dutyCycle) 
+    : userConfig{sensorID, destID, role, flameThreshold, gasThreshold, tempThreshold, sleepTime, dutyCycle} {}
+
+    // Read from csv file
+    void parseCsvLine(const String& line, UserConfig& userConfig);
+    void readUserConfig(const std::string& filename, UserConfig& config);
+    void printUserConfig(const UserConfig& userConfig);
+    UserConfig getUserConfig() { return userConfig; }
+
+}; // class UserInitConfiguration
+
+} // namespace UserInitConfig
+
+#endif // USERINITCONFIG_HPP

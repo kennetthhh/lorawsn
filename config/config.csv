@@ -1,0 +1,2 @@
+sensorID,destID,role,gasThreshold,tempThreshold,pressureThreshold,sleepTime,dutyCycle
+1,2,0,1000,25,1000,10,50

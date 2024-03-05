@@ -1,0 +1,24 @@
+@startuml
+
+skinparam Shadowing false
+
+activate Cloud
+activate Pi 
+activate Cluster_Head
+
+Sensor_1 -> Cluster_Head: Send regular Lora Message
+Sensor_2 -> Cluster_Head: Send regular Lora Message
+Sensor_3 -> Cluster_Head: Send regular Lora Message
+
+Cluster_Head -> Pi: Send its own data and data from sensors
+Pi -> Cloud: Send data from sensors
+Cluster_Head -> Sensor_1: Its heartbeat ping
+Cluster_Head -> Sensor_2: Its heartbeat ping
+Cluster_Head -> Sensor_3: Its heartbeat ping
+
+Cloud -> Pi: Update new thresholds for fire detection algorithm
+Cloud -> Pi: Update new thresholds for sensors
+Pi -> Cluster_Head: Update thresholds for Sensor_3
+Cluster_Head -> Sensor_3: Update thresholds for Sensor_3
+
+@enduml

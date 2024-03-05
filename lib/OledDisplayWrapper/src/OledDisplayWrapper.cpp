@@ -1,0 +1,112 @@
+#include "OledDisplayWrapper.hpp"
+
+namespace OledDisplay
+{
+    bool OledDisplayWrapper::initOledDisplay(Adafruit_SSD1306& display, TwoWire& Wire1)
+    {
+        bool valid_initOledDisplay = false;
+
+        // Reset the OLED display
+        pinMode(OLED_RST, OUTPUT);
+        digitalWrite(OLED_RST, LOW);
+        delay(50);
+        digitalWrite(OLED_RST, HIGH);
+
+        // Set the pin mode to input
+        bool wireStatus = Wire1.begin(OLED_SDA, OLED_SCL);
+        if (!wireStatus)
+        {
+            Serial.println("Wire1 failed to begin");
+        }
+
+        bool displayStatus = display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false, false);
+        if (!displayStatus)
+        {
+            Serial.println("OLED display failed to begin");
+        }
+
+        if (wireStatus && displayStatus)
+        {
+            valid_initOledDisplay = true;
+        }
+
+        return valid_initOledDisplay;
+    }
+
+
+    void OledDisplayWrapper::displaySensorData(Adafruit_SSD1306& display, 
+                            double T, int gasValue, bool gasState, int flameValue, bool flameState, 
+                            int bootCount, int packetCount, int role, int SENSOR_ID)
+    {
+        display.clearDisplay();
+        display.setTextColor(WHITE);
+        display.setTextSize(1);
+
+        // Sensor & Packet Information
+        display.setCursor(0,0);
+        if (role == 0) {
+            display.print("LORA C_HEAD " + String(SENSOR_ID));
+        }
+        else {
+            display.print("LORA SENSOR " + String(SENSOR_ID));
+        }
+
+        display.setCursor(0,10);
+        display.print("Boot cycle:");
+        display.setCursor(85,10);
+        display.print(bootCount);
+
+        display.setCursor(0,20);
+        display.print("Packet sent:");
+        display.setCursor(85,20);
+        display.print(packetCount);
+
+        // Sensor Values
+        display.setCursor(0,30);
+        display.print("Temperature: ");
+        display.setCursor(85,30);
+        display.print(T);
+        display.setCursor(120,30);
+        display.print("C");
+
+        display.setCursor(0,40);
+        display.print("Gas AO: ");
+        display.setCursor(85,40);
+        display.print(gasValue);
+
+        if (gasState == HIGH) {
+            display.setCursor(120,40);
+            display.print("-");
+        }
+        else {
+            display.setCursor(120,40);
+            display.print("G");
+
+            display.setCursor(102,10);
+            display.print("GAS!");
+        }
+
+        display.setCursor(0,50);
+        display.print("Flame AO: ");
+        display.setCursor(85,50);
+        display.print(flameValue);
+
+        if (flameState == HIGH) {
+            display.setCursor(120,50);
+            display.print("-");
+        }
+        else {
+            display.setCursor(120,50);
+            display.print("F");
+
+            display.setCursor(96,0);
+            display.print("FIRE!");
+        }
+
+        // update display
+        display.display();
+
+        return;
+    }
+
+} // namespace OledDisplay

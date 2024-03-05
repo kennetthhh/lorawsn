@@ -1,0 +1,51 @@
+/*****************************************************************/
+/********************** Thresholds Handler ***********************/
+/******** authored by Kenneth Leow (zhleow.7@gmail.com) **********/
+/*****************************************************************/
+#ifndef THRESHOLDSHANDLER_HPP
+#define THRESHOLDSHANDLER_HPP
+
+#include <Arduino.h>
+#include <stdint.h>
+
+namespace ThresholdsHandler
+{
+// ThresholdsHandler Class
+class ThresholdsHandler
+{
+    private:
+    typedef struct _Thresholds
+    {
+        long gasThreshold;
+        long tempThreshold;
+        long pressureThreshold;
+        int sleepTime;
+        int dutyCycle;
+    } Thresholds;
+    
+    Thresholds _thresholds;
+
+    public:
+    // Constructor
+    ThresholdsHandler() {}
+    ThresholdsHandler(long gasThreshold, long tempThreshold, long pressureThreshold, int sleepTime, int dutyCycle) : _thresholds{gasThreshold, tempThreshold, pressureThreshold, sleepTime, dutyCycle} {}
+
+    // Setters
+    bool setGasThreshold(long gasThreshold);
+    bool setTempThreshold(long tempThreshold);
+    bool setPressureThreshold(long pressureThreshold);
+    bool setSleepTime(int sleepTime);
+    bool setDutyCycle(int dutyCycle);
+
+    // Getters
+    long getGasThreshold();
+    long getTempThreshold();
+    long getPressureThreshold();
+    int getSleepTime();
+    int getDutyCycle();
+
+}; // class ThresholdsHandler
+
+} // namespace ThresholdsHandler
+
+#endif // THRESHOLDSHANDLER_HPP

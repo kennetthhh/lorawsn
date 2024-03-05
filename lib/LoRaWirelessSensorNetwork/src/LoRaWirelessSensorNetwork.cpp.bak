@@ -1,0 +1,529 @@
+#include "LoRaWirelessSensorNetwork.hpp"
+
+/* ----------------------------- CONFIGURAION SETUP ------------------------------------- */
+/* -------------------------------------------------------------------------------------- */
+/* ------------------------ by using the UserInitConfig class --------------------------- */
+/* --------------------- Load the configuration from a .csv file ------------------------ */
+/* -------------------------------------------------------------------------------------- */
+/* -------------------- by using the AutoNetworkingProtocol class ----------------------- */
+/* ---------------- Set the role, sensorID, and destID of this device ------------------- */
+/* -------------------------------------------------------------------------------------- */
+/* ----------------------- by using the ThresholdsHandler class ------------------------- */
+/* ------- Set the temp, press., gas and flame sensors' threshold of this device -------- */
+/* -------------------------------------------------------------------------------------- */
+/* -------------------------- by using the SleepHandler class --------------------------- */
+/* ------------------- Set the sleep time and cycle of this device ---------------------- */
+/* -------------------------------------------------------------------------------------- */
+#if THIS_SENSOR_ID == 1
+// Set the OLED and Sensors connected flags
+#define OLED_DISPLAY false
+#define SENSORS_CONNECTED false
+// LoRa pins ESP32 WROOM with XL1276 LoRa module
+#define LORA_RST GPIO_NUM_14
+#define LORA_SS_CS GPIO_NUM_5
+#define LORA_SCK GPIO_NUM_18
+#define LORA_MOSI GPIO_NUM_23
+#define LORA_MISO GPIO_NUM_19
+#define LORA_DIO0 GPIO_NUM_4
+// Awake Time
+#define AWAKE_TIME 180000
+UserInitConfig::UserInitConfiguration uic(
+    1, 4, AutoNetwProc::AutoNetworkingProtocol::Roles::Cluster_Head, 2000, 1000, 23, 30, 20
+);
+// Set the thresholds for the sensors
+ThresholdsHandler::ThresholdsHandler th(2000, 1000, 23);
+// Set the sleep time and duty cycle
+SleepHandler::SleepHandler sh(30, 20);
+// Set the sensor ID, role, and destination ID
+AutoNetwProc::AutoNetworkingProtocol anp(1, 0, 
+                                AutoNetwProc::AutoNetworkingProtocol::Roles::Cluster_Head);
+#endif
+/* -------------------------------------------------------------------------------------- */
+#if THIS_SENSOR_ID == 2 
+// Set the OLED and Sensors connected flags
+#define OLED_DISPLAY true
+#define SENSORS_CONNECTED false
+// LoRa pins Heltech WiFi LoRa 32 (V1)
+#define LORA_RST GPIO_NUM_14
+#define LORA_SS_CS GPIO_NUM_18
+#define LORA_SCK GPIO_NUM_5
+#define LORA_MOSI GPIO_NUM_27
+#define LORA_MISO GPIO_NUM_19
+#define LORA_DIO0 GPIO_NUM_26
+// Awake Time
+#define AWAKE_TIME 80000
+UserInitConfig::UserInitConfiguration uic(
+    2, 1, AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node, 2000, 1000, 23, 30, 20
+);
+// Set the thresholds for the sensors
+ThresholdsHandler::ThresholdsHandler th(2000, 1000, 23);
+// Set the sleep time and duty cycle
+SleepHandler::SleepHandler sh(30, 20);
+// Set the sensor ID, role, and destination ID
+AutoNetwProc::AutoNetworkingProtocol anp(2, 1, 
+                                AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node);
+#endif
+/* -------------------------------------------------------------------------------------- */
+#if THIS_SENSOR_ID == 3
+// Set the OLED and Sensors connected flags
+#define OLED_DISPLAY true
+#define SENSORS_CONNECTED true
+// LoRa pins Heltech WiFi LoRa 32 (V1)
+#define LORA_RST GPIO_NUM_14
+#define LORA_SS_CS GPIO_NUM_18
+#define LORA_SCK GPIO_NUM_5
+#define LORA_MOSI GPIO_NUM_27
+#define LORA_MISO GPIO_NUM_19
+#define LORA_DIO0 GPIO_NUM_26
+// Awake Time
+#define AWAKE_TIME 80000
+UserInitConfig::UserInitConfiguration uic(
+    3, 1, AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node, 2000, 1000, 23, 30, 20
+);
+
+// Set the thresholds for the sensors
+ThresholdsHandler::ThresholdsHandler th(2000, 1000, 23);
+// Set the sleep time and duty cycle
+SleepHandler::SleepHandler sh(30, 20);
+// Set the sensor ID, role, and destination ID
+AutoNetwProc::AutoNetworkingProtocol anp(3, 1, 
+                                AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node);
+// AutoNetwProc::AutoNetworkingProtocol anp(3, 7, 
+//                                 AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node);
+
+#endif
+/* -------------------------------------------------------------------------------------- */
+#if THIS_SENSOR_ID == 4
+// Set the OLED and Sensors connected flags
+#define OLED_DISPLAY false
+#define SENSORS_CONNECTED false
+// LoRa pins ESP32 WROOM with XL1276 LoRa module
+#define LORA_RST GPIO_NUM_14
+#define LORA_SS_CS GPIO_NUM_5
+#define LORA_SCK GPIO_NUM_18
+#define LORA_MOSI GPIO_NUM_23
+#define LORA_MISO GPIO_NUM_19
+#define LORA_DIO0 GPIO_NUM_4
+// Awake Time
+#define AWAKE_TIME 180000
+UserInitConfig::UserInitConfiguration uic(
+    4, 0, AutoNetwProc::AutoNetworkingProtocol::Roles::Cluster_Head, 2000, 1000, 23, 30, 20
+);
+// Set the thresholds for the sensors
+ThresholdsHandler::ThresholdsHandler th(2000, 1000, 23);
+// Set the sleep time and duty cycle
+SleepHandler::SleepHandler sh(30, 20);
+// Set the sensor ID, role, and destination ID
+AutoNetwProc::AutoNetworkingProtocol anp(4, 1, 
+                                AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node);
+#endif
+/* -------------------------------------------------------------------------------------- */
+#if THIS_SENSOR_ID == 5
+// Set the OLED and Sensors connected flags
+#define OLED_DISPLAY true
+#define SENSORS_CONNECTED true
+// LoRa pins Heltech WiFi LoRa 32 (V1)
+#define LORA_RST GPIO_NUM_14
+#define LORA_SS_CS GPIO_NUM_18
+#define LORA_SCK GPIO_NUM_5
+#define LORA_MOSI GPIO_NUM_27
+#define LORA_MISO GPIO_NUM_19
+#define LORA_DIO0 GPIO_NUM_26
+// Awake Time
+#define AWAKE_TIME 80000
+UserInitConfig::UserInitConfiguration uic(
+    5, 4, AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node, 2000, 1000, 23, 30, 20
+);
+// Set the thresholds for the sensors
+ThresholdsHandler::ThresholdsHandler th(2000, 1000, 23);
+// Set the sleep time and duty cycle
+SleepHandler::SleepHandler sh(30, 20);
+// Set the sensor ID, role, and destination ID
+AutoNetwProc::AutoNetworkingProtocol anp(5, 4, 
+                                AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node);
+#endif
+/* -------------------------------------------------------------------------------------- */
+#if THIS_SENSOR_ID == 6
+// Set the OLED and Sensors connected flags
+#define OLED_DISPLAY true
+#define SENSORS_CONNECTED false
+// LoRa pins Heltech WiFi LoRa 32 (V1)
+#define LORA_RST GPIO_NUM_14
+#define LORA_SS_CS GPIO_NUM_18
+#define LORA_SCK GPIO_NUM_5
+#define LORA_MOSI GPIO_NUM_27
+#define LORA_MISO GPIO_NUM_19
+#define LORA_DIO0 GPIO_NUM_26
+// Awake Time
+#define AWAKE_TIME 80000
+UserInitConfig::UserInitConfiguration uic(
+    6, 4, AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node, 2000, 1000, 23, 30, 20
+);
+// Set the thresholds for the sensors
+ThresholdsHandler::ThresholdsHandler th(2000, 1000, 23);
+// Set the sleep time and duty cycle
+SleepHandler::SleepHandler sh(30, 20);
+// Set the sensor ID, role, and destination ID
+AutoNetwProc::AutoNetworkingProtocol anp(6, 4, 
+                                AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node);
+#endif
+/* -------------------------------------------------------------------------------------- */
+#if THIS_SENSOR_ID == 7
+// Set the OLED and Sensors connected flags
+#define OLED_DISPLAY false
+#define SENSORS_CONNECTED false
+// LoRa pins ESP32 WROOM with XL1276 LoRa module
+#define LORA_RST GPIO_NUM_14
+#define LORA_SS_CS GPIO_NUM_5
+#define LORA_SCK GPIO_NUM_18
+#define LORA_MOSI GPIO_NUM_23
+#define LORA_MISO GPIO_NUM_19
+#define LORA_DIO0 GPIO_NUM_4
+// Awake Time
+#define AWAKE_TIME 80000
+UserInitConfig::UserInitConfiguration uic(
+    7, 4, AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node, 2000, 1000, 23, 30, 20
+);
+// Set the thresholds for the sensors
+ThresholdsHandler::ThresholdsHandler th(2000, 1000, 23);
+// Set the sleep time and duty cycle
+SleepHandler::SleepHandler sh(30, 20);
+// Set the sensor ID, role, and destination ID
+// AutoNetwProc::AutoNetworkingProtocol anp(7, 4, 
+//                                 AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node);
+AutoNetwProc::AutoNetworkingProtocol anp(7, 1, 
+                                AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node);
+#endif
+/* -------------------------------------------------------------------------------------- */
+
+// Boot Counter
+RTC_DATA_ATTR long bootCount = 0;
+
+/* ------------------------ Initialize the peripherals ------------------------ */
+// LED Onboard (ESP32 WROOM)
+#define LED_ONBOARD GPIO_NUM_2
+
+// Initialize the BMP180 sensor
+Adafruit_BMP085 bmp;
+TempPresSensor::TempPresSensorWrapper tp;
+    
+// Initialize the Flame Sensor
+FlameSensor::FlameSensorWrapper fst;
+
+// Initialize the Gas Sensor
+GasSensor::GasSensorWrapper gs;
+
+// Initialize the OLED Display
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RST);
+OledDisplay::OledDisplayWrapper od;
+
+// Initialize the LoRa module
+LoRaWrapper::LoRaWrapper lw;
+
+// Instantiate LoraProtocol
+LoraProtocol::LoraProtocol lp;
+
+// New Role
+RTC_DATA_ATTR AutoNetwProc::AutoNetworkingProtocol::Roles newRole;
+// New Destination ID
+RTC_DATA_ATTR uint8_t newDestID;
+
+// Init flag for the first time
+RTC_DATA_ATTR bool initFlag = true;
+
+/* -------------------------------------------------------------------------- */
+
+void LoRaWirelessSensorNetwork::initNode()
+{
+    bootCount++; // Increment the boot counter
+
+    /* -------- Initialize the peripherals ---------- */ 
+    Serial.println("Initializing the peripherals...");
+
+    if(SENSORS_CONNECTED)
+    {
+        tp.initTempPresSensor(bmp, Wire1); // Initialize the BMP180 sensor
+        fst.initFlameSensor();             // Initialize the Flame Sensor
+        gs.initGasSensor();                // Initialize the Gas Sensor
+    }
+
+    if(OLED_DISPLAY)
+    {
+        od.initOledDisplay(display, Wire); // Initialize the OLED Display
+    }
+    else
+    {
+        pinMode(LED_ONBOARD, OUTPUT);      // Initialize the LED Onboard
+    }
+
+    // Initialize the LoRa module
+    SPI.begin(LORA_SCK, LORA_MISO, LORA_MOSI, LORA_SS_CS);   // SPI LoRa pins  
+    LoRa.setPins(LORA_SS_CS, LORA_RST, LORA_DIO0);           // setup LoRa transceiver module
+
+    if (!LoRa.begin(lw.getLORA_BAND())) // LoRa band for Europe
+    {
+        Serial.println("Starting LoRa failed!");
+        while (true);
+    }
+
+    // LoRa parameters
+    LoRa.setSpreadingFactor(lw.getLORA_SPREADING_FACTOR());
+    LoRa.setSignalBandwidth(lw.getLORA_SIGNAL_BANDWIDTH());
+    LoRa.setTxPower(lw.getLORA_TX_POWER());
+    /* ---------------------------------------------- */
+
+    /* -------------- Set Thresholds ---------------- */
+    th.setTempThreshold(28);
+    /* ---------------------------------------------- */
+
+    /* -------------- Initialize Sleep --------------- */
+    sh.setSleepTime(10);
+    sh.setDutyCycle(2);
+    /* ---------------------------------------------- */
+
+    /* ------------- Role and Dest ID back ---------- */
+    if(initFlag)
+    {
+        initFlag = false;
+        newRole = anp.getRole();
+        newDestID = anp.getDestID();
+    }
+    else
+    {
+        anp.setRole(newRole);
+        anp.setDestID(newDestID);
+    }
+
+    return;
+}
+
+void LoRaWirelessSensorNetwork::processCyclic()
+{
+    // Get the destination ID, role, and sensor ID
+    uint8_t myDESTID = anp.getDestID();
+    AutoNetwProc::AutoNetworkingProtocol::Roles myRole = anp.getRole();
+    uint8_t myID = anp.getSensorID();
+
+    // Initialize the values
+    double temp = 0;
+    double press = 0;
+    int flame = 0;
+    bool flameState = 1;
+    int gas = 0;
+    bool gasState = 1;
+
+    // Get Bitmask for Gas Sensor
+    long long BITMASK_GAS = const_cast<GasSensor::GasSensorWrapper&>(gs).getBitmaskGas();
+    gpio_num_t DO_PIN_FLAME = const_cast<FlameSensor::FlameSensorWrapper&>(fst).getDoPinFlame();
+
+    // Do while loop for 1minute and 20s
+    long long startMillis = millis();
+    long long currentMillis = millis();
+
+    // Set the interval for sending the data
+    long lastSendTime = 0;
+    long interval = 2000;
+    long msgCount = 0;
+
+    // Set the interval for heartbeat sending
+    long lastHeartbeatSendTime = 0;
+    long heartbeatInterval = 10000;
+
+    long lastHeartbeatReceiveTime = millis();
+
+    do
+    // while(1)
+    {
+        bool flag_new_role = false;
+        if (flag_new_role)
+        {
+            myRole = anp.getRole();
+            flag_new_role = false;
+        }
+
+        /* ----------------------------- Obtain Values -------------------------------*/
+        if(SENSORS_CONNECTED)
+        {
+            // Read the temperature and pressure
+            temp = tp.readTemperature(bmp);
+            // Pressure should be converted to hPa
+            press = tp.readPressure(bmp) / 100.0F;
+
+            // Read the flame sensor and state
+            flame = fst.readFlameValue();
+            flameState = fst.readFlameState();
+
+            // Read the gas sensor
+            gas = gs.readGasValue();
+            gasState = gs.readGasState();
+        }
+        else
+        {
+            // Random values for the sensors
+            temp = random(20, 25);
+            press = random(1000, 1010);
+            flame = random(2048, 4095);
+            gas = random(500, 1500);
+            flameState = true; // No flame
+            gasState = true;   // No gas
+        }
+        /* --------------------------------------------------------------------------*/
+
+
+        #if TEST_LORA_INDIVIDUAL_SEND_AND_RECEIVE
+        /* ----------------------------- Send Data ----------------------------------*/
+        LoraProtocol::LoraProtocol::LoRaMessage sendMsg;
+        if (millis() - lastSendTime > interval) 
+        {
+            // Blink LED
+            digitalWrite(LED_ONBOARD, HIGH);
+
+            // Send the data
+            lp.processTransmission(lw, sendMsg, myID, myDESTID, batteryValue, 
+                                    temp, flame, flameState, gas, gasState, myRole, OLED_DISPLAY, 
+                                    LED_ONBOARD, 1000);
+
+            // Blink LED
+            digitalWrite(LED_ONBOARD, LOW);
+            lastSendTime = millis();            // timestamp the message
+            interval = random(200);             // 200ms interval
+        }        
+        /* --------------------------------------------------------------------------*/
+
+
+        /* --------------------------- Receive Data ---------------------------------*/
+        // Get the message structure of the received 
+        LoraProtocol::LoraProtocol::LoRaMessage receivedMsg;
+        if (LoRa.parsePacket() >= 0) 
+        {
+            // Receive the data from the LoRa module
+            lp.processReception(lw, receivedMsg, myID, myDESTID, myRole, 1000);
+        }    
+        /* --------------------------------------------------------------------------*/
+
+        /* --------------------------- Heartbeat Mech. ------------------------------*/
+        // If I am Cluster Head
+        myRole = anp.getRole();
+        if(myRole == AutoNetwProc::AutoNetworkingProtocol::Roles::Cluster_Head && millis() - lastHeartbeatSendTime > heartbeatInterval)
+        {
+           // Get the member cluster list
+            std::vector<uint8_t> currMemberList = anp.getClusterMemberList();
+
+            // only send heartbeat if cluster member list not empty
+            if(!currMemberList.empty())
+            {
+                // Send the heartbeat message
+                for (const auto& member : currMemberList) {
+                    anp.sendHeartbeat(member);
+                    delay(random(50));
+                } 
+            }
+
+            lastHeartbeatSendTime = millis();
+            heartbeatInterval = random(100);
+        }
+
+        // If I am Member Node
+        if(myRole == AutoNetwProc::AutoNetworkingProtocol::Roles::Member_Node)
+        {
+            // Flag for heartbeat reception indicator
+            bool flag = false;
+            bool didClustering = false;
+
+            if (LoRa.parsePacket() >= 0) 
+            {
+                // Receive the heartbeat message
+                flag = anp.receiveHeartbeat(myID);
+            }
+
+            if(flag)
+            {
+                lastHeartbeatReceiveTime = millis();
+            }
+
+            // If I did not receive the heartbeat
+            if (millis() - lastHeartbeatReceiveTime > heartbeatTimeout)
+            {
+                // Reelect the Cluster Head
+                Serial.println("Reelecting the Cluster Head...");
+                lastHeartbeatReceiveTime = millis();
+                newRole = anp.doClustering();
+                anp.setRole(newRole);
+                Serial.println("New Role after Clustering Procedure: " + String(newRole));
+                didClustering = true;
+            }
+
+            myRole = newRole;
+
+            if (didClustering && (myRole == AutoNetwProc::AutoNetworkingProtocol::Roles::Cluster_Head || 
+                myRole == AutoNetwProc::AutoNetworkingProtocol::Roles::Gateway))
+            {
+                // newDestID = anp.doRouting();
+                newDestID = 0;
+                Serial.println("New Destination ID after Routing Procedure: " + String(newDestID));
+            }
+
+        }
+        /* --------------------------------------------------------------------------*/
+        #endif
+
+        // if I am the cluster head or gateway
+        if(myRole == AutoNetwProc::AutoNetworkingProtocol::Roles::Cluster_Head
+            || myRole == AutoNetwProc::AutoNetworkingProtocol::Roles::Gateway)
+        {
+            anp.replyRREQ();
+        }
+            
+
+        /* -------------------------- Process External Cmds -------------------------*/
+        // Process the external commands
+        lp.processExtCommands(myID, th, sh);
+
+        /* ----------------------------- Display Values -----------------------------*/
+        if(OLED_DISPLAY)
+        {
+            // Display the sensor data on the OLED
+            od.displaySensorData(display, temp, gas, gasState, flame, flameState, 
+                                bootCount, 0, myRole, myID); 
+        }
+
+        if(SLEEP_MODE)
+        {
+            sh.print_wakeup_reason();
+        }
+
+        #if SERIAL_PRINT
+        // Display the sensor data on the Serial Monitor
+        Serial.println("\nMy Data of Sensor " + String(myID) + " is as follows:");
+        Serial.println("The Destination ID is " + String(myDESTID));
+        Serial.println("The Role is " + String(myRole));
+        Serial.println("Temperature: " + String(temp) + " deg C");
+        Serial.println("Pressure: " + String(press) + " hPa");
+        Serial.println("Flame Sensor: " + String(flame));
+        Serial.println("Flame State: " + String(flameState));
+        Serial.println("Gas Sensor: " + String(gas));
+        Serial.println("Gas State: " + String(gasState) + "\n");
+        delay(100);
+        #endif
+        /* --------------------------------------------------------------------------*/
+        currentMillis = millis();
+    }
+    while (myRole == AutoNetwProc::AutoNetworkingProtocol::Roles::Cluster_Head
+        || myRole == AutoNetwProc::AutoNetworkingProtocol::Roles:: Gateway
+        || flameState == 0
+        || temp >= th.getTempThreshold()
+        || currentMillis - startMillis < AWAKE_TIME);
+
+
+    if(SLEEP_MODE)
+    {
+        // Go to sleep
+        LoRa.end();
+        LoRa.sleep();
+        delay(100);
+
+        // Enter the deep sleep
+        sh.goToSleep(SENSORS_CONNECTED, BITMASK_GAS, DO_PIN_FLAME);
+    }
+    return;
+}

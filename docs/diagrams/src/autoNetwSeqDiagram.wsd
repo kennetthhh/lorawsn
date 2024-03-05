@@ -1,0 +1,45 @@
+@startuml
+
+' Title: Clustering Protocol
+
+' Ping Others
+activate Sensor_1
+activate Sensor_2
+activate Sensor_3
+
+group Ping
+    Sensor_1->Sensor_2: Ping (Sensor ID, Checksum)
+    Sensor_1->Sensor_3: Ping (Sensor ID, Checksum)
+    Sensor_2->Sensor_1: Ping (Sensor ID, Checksum)
+    Sensor_2->Sensor_3: Ping (Sensor ID, Checksum)
+    Sensor_3->Sensor_1: Ping (Sensor ID, Checksum)
+    Sensor_3->Sensor_2: Ping (Sensor ID, Checksum)
+end
+
+' Ping Response
+group Ping Response
+    Sensor_2->Sensor_1: Ping Response (Sensor ID, Checksum)
+    Sensor_3->Sensor_1: Ping Response (Sensor ID, Checksum)
+    Sensor_1->Sensor_2: Ping Response (Sensor ID, Checksum)
+    Sensor_3->Sensor_2: Ping Response (Sensor ID, Checksum)
+    Sensor_1->Sensor_3: Ping Response (Sensor ID, Checksum)
+    Sensor_2->Sensor_3: Ping Response (Sensor ID, Checksum)
+end
+
+' Verify Cluster Head
+group Verify Cluster Head
+    Sensor_1->Sensor_2: Verify Cluster Head (Head ID, Checksum)
+    Sensor_1->Sensor_3: Verify Cluster Head (Head ID, Checksum)
+    Sensor_2->Sensor_1: Verify Cluster Head (Head ID, Checksum)
+    Sensor_2->Sensor_3: Verify Cluster Head (Head ID, Checksum)
+    Sensor_3->Sensor_1: Verify Cluster Head (Head ID, Checksum)
+    Sensor_3->Sensor_2: Verify Cluster Head (Head ID, Checksum)
+end
+
+' Cluster Head Broadcast if Cluster Head is Sensor_1
+group Cluster Head Broadcast (if Cluster Head is Sensor_1)
+    Sensor_1->Sensor_2: Cluster Head Broadcast (Own ID, Checksum)
+    Sensor_1->Sensor_3: Cluster Head Broadcast (Own ID, Checksum)
+end
+
+@enduml

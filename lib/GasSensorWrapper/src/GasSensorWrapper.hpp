@@ -1,0 +1,57 @@
+/*****************************************************************/
+/********************* Gas Sensor Wrapper ************************/
+/*****************************************************************/
+
+/*** Gas Sensor MQ-2
+Wiring connections
+MQ-2    Heltec WiFi LoRa 32
+DO      36
+AO      37
+VCC     5V (3.3V possible, but slower)
+GND     GND
+***/
+
+#ifndef GAS_SENSOR_WRAPPER_HPP
+#define GAS_SENSOR_WRAPPER_HPP
+
+#include <Arduino.h>
+#include <Wire.h>
+
+namespace GasSensor
+{
+    // MQ-2 Gas Sensor Pin Definitions and Constants
+    static constexpr gpio_num_t DO_PIN_GAS = GPIO_NUM_36;   // Digital Output Pin
+    static constexpr gpio_num_t AO_PIN_GAS = GPIO_NUM_37;   // Analog Output Pin
+    static constexpr long long BITMASK_GAS = 0x1000000000;  // Bitmask for external wakeup from sleep, equals 2^36 in hex -> refers to PIN 36
+
+// GasSensorWrapper class for MQ-2 Gas Sensor
+class GasSensorWrapper
+{
+    private:
+    int _gasValue; // Gas Sensor Value
+    bool _gasState; // Gas Sensor State
+
+    public:
+    // Constructor
+    GasSensorWrapper() : _gasValue(0), _gasState(false) {}
+
+    // Destructor
+    ~GasSensorWrapper() {}
+
+    // Initialize Gas Sensor
+    bool initGasSensor();
+
+    // Read Gas Sensor Value
+    int readGasValue();
+
+    // Read Gas Sensor State
+    bool readGasState();
+
+    // Get Bitmask for Gas Sensor
+    long long getBitmaskGas() const;
+
+}; // end of GasSensorWrapper class
+
+} // end of GasSensor namespace
+
+#endif // GAS_SENSOR_WRAPPER_HPP

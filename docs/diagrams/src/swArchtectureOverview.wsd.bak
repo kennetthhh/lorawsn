@@ -1,0 +1,171 @@
+@startuml
+class LoRaWirelessSensorNetwork
+{
+    + void initNode()
+    + void staticAssignment()
+    + void processCyclic()
+}
+
+class OledDisplayWrapper
+{
+    - bool OLED_DISPLAY = {ON, OFF}
+    - uint8_t OLED_SDA
+    - uint8_t OLED_SCL
+    - uint8_t OLED_RST
+    - uint8_t SCREEN_WIDTH
+    - uint8_t SCREEN_HEIGHT
+    + void initOledDisplay() 
+    + void displayInfo() 
+}
+
+class LoRaWrapper
+{
+    - uint8_t LORA_RST
+    - uint8_t LORA_SS_CS
+    - uint8_t LORA_SCK
+    - uint8_t LORA_MOSI
+    - uint8_t LORA_MISO
+    - uint8_t LORA_DIO0
+    - int LORA_BAND
+    - int LORA_FREQ
+    - uint8_t LORA_TX_POWER
+    - uint8_t LORA_SPREADING_FACTOR
+    - int LORA_SIGNAL_BANDWIDTH
+    - uint8_t LORA_CODING_RATE
+    - bool LORA_CRC
+    - uint8_t LORA_LNA_GAIN
+    + void initLoRa()
+    + void sendLoRaMessage()
+    + void receiveLoRaMessage()
+}
+
+class TempSensorWrapper
+{
+    - tempValue
+    + bool initTempSensor()
+    + long readTempValues()
+}
+
+class GasSensorWrapper
+{
+    - gasValue
+    + bool initGasSensor()
+    + long readGasValues()
+}
+
+class FlameSensorWrapper
+{
+    - flameState
+    + bool initFlameSensor()
+    + bool readFlameState()
+}
+
+class LoraProtocol
+{
+    - LoraProtocol loraProtocol 
+    - Msg_Header msgHeader
+    - Payload payload
+    - LoRaMessage loraMessage
+    + void processExtCmds()
+    + void processReception()
+    + void processTransmission()
+    - void packNibblesIntoByte()
+    - void unpackByteIntoNibbles()
+    - void packBooleansIntoByte()
+    - void unpackByteIntoBooleans()
+    - void triggerReelection()
+    - void serializeMsg()
+    - void deserializeMsg()
+}
+
+class ChecksumProtocol
+{
+    - uint8_t checksum
+    + uint8_t calculateChecksum()
+    + bool verifyChecksum()
+}
+
+class AutoNetworkingProtocol
+{
+    - ROLES Role = {Cluster_Head, Gateway, Member_Node}
+    - uint8_t SENSOR_ID
+    - uint8_t DEST_ID
+    - CommonClusteringMsg commonClusteringMsg
+    - ClusteringMsg clusteringMsg
+    + uint8_t getSensorID()
+    + uint8_t getDestID()
+    + void setDestID()
+    + ROLES getRole()
+    + void setRole()
+    + void processReelection()
+    + void setAssignment()
+    - void doClustering()
+    - void doRouting()
+}
+
+class SleepHandler
+{
+    - uint8_t sleepTime
+    - uint8_t sleepCounter
+    + void initSleepHandler()
+    + void goToSleep()
+    + void setSleepTime()
+    + void setSleepCounter()
+    + void getSleepTime()
+    + void getSleepCounter()
+}
+
+class ThresholdsHandler
+{
+    - int TEMPERATURE_THRESHOLD
+    - int GAS_THRESHOLD
+    - int FLAME_THRESHOLD
+    + void initThresholdsHandler()
+    + bool setTemperatureThreshold()
+    + int getTemperatureThreshold()
+    + bool setGasThreshold()
+    + int getGasThreshold()
+    + bool setFlameThreshold()
+    + int getFlameThreshold()
+}
+
+class UserInitConfig
+{
+    - uint8_t SENSOR_ID
+    - uint8_t TEMPERATURE_THRESHOLD
+    - int GAS_THRESHOLD
+    - int FLAME_THRESHOLD
+    - uint8_t sleepTime
+    - uint8_t sleepCounter
+    - ROLES Role 
+    - uint8_t DEST_ID
+    + bool readUserConfig()
+    + uint8_t getConfSensorID()
+    + uint8_t getConfTempThreshold()
+    + int getConfGasThreshold()
+    + int getConfFlameThreshold()
+    + uint8_t getConfSleepTime()
+    + uint8_t getConfSleepCounter()
+    + uint8_t getConfDestID()
+}
+
+LoRaWirelessSensorNetwork ..> OledDisplayWrapper
+LoRaWirelessSensorNetwork ..> LoraProtocol
+LoRaWirelessSensorNetwork ..> SleepHandler
+LoRaWirelessSensorNetwork ..> ThresholdsHandler
+LoRaWirelessSensorNetwork ..> LoRaWrapper
+LoRaWirelessSensorNetwork ..> AutoNetworkingProtocol
+LoRaWirelessSensorNetwork ..> FlameSensorWrapper
+LoRaWirelessSensorNetwork ..> GasSensorWrapper
+LoRaWirelessSensorNetwork ..> TempSensorWrapper
+LoraProtocol ..> ChecksumProtocol
+LoraProtocol ..> LoRaWrapper
+LoraProtocol ..> AutoNetworkingProtocol
+LoraProtocol ..> ThresholdsHandler
+LoraProtocol ..> SleepHandler
+OledDisplayWrapper..>AutoNetworkingProtocol
+UserInitConfig..>AutoNetworkingProtocol
+SleepHandler ..> LoRaWrapper
+LoRaWirelessSensorNetwork ..>UserInitConfig
+
+@enduml
